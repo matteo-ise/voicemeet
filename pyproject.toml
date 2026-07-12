@@ -43,7 +43,7 @@ all = ["voicemeet[audio,transcribe,menubar,dev]"]
 voicemeet = "voicemeet.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/user/voicemeet-pro"
+Homepage = "https://github.com/matteo-ise/voicemeet"
 
 [tool.setuptools]
 package-dir = { "" = "src" }

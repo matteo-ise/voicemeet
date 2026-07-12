@@ -4,7 +4,7 @@
 
 ### Premium local meeting notes — zero cost, fully private, no cloud.
 
-[![CI](https://github.com/user/voicemeet-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/user/voicemeet-pro/actions)
+[![CI](https://github.com/matteo-ise/voicemeet/actions/workflows/ci.yml/badge.svg)](https://github.com/matteo-ise/voicemeet/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://www.apple.com/macos)
@@ -41,8 +41,8 @@ You're in back-to-back meetings. You take voice notes on your phone, screenshot 
 ## Quick start (60 seconds)
 
 ```bash
-git clone https://github.com/user/voicemeet-pro.git
-cd voicemeet-pro
+git clone https://github.com/matteo-ise/voicemeet.git
+cd voicemeet
 ./scripts/install.sh
 ```
 
@@ -136,8 +136,8 @@ Background daemon watches for meeting apps (Zoom, Teams, Meet, Discord, Notion, 
 ### Option A: One-command install (recommended)
 
 ```bash
-git clone https://github.com/user/voicemeet-pro.git
-cd voicemeet-pro
+git clone https://github.com/matteo-ise/voicemeet.git
+cd voicemeet
 ./scripts/install.sh
 ```
 
@@ -151,8 +151,8 @@ The installer:
 ### Option B: Manual install
 
 ```bash
-git clone https://github.com/user/voicemeet-pro.git
-cd voicemeet-pro
+git clone https://github.com/matteo-ise/voicemeet.git
+cd voicemeet
 pip install -e ".[all]"
 ollama pull llama3.2
 

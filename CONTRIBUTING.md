@@ -6,8 +6,8 @@ Thanks for your interest in voicemeet-pro! This is a community-driven, MIT-licen
 
 ```bash
 # Clone
-git clone https://github.com/user/voicemeet-pro.git
-cd voicemeet-pro
+git clone https://github.com/matteo-ise/voicemeet.git
+cd voicemeet
 
 # Install with dev deps
 pip install -e ".[dev]"
