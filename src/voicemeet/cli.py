@@ -1,4 +1,4 @@
-"""CLI for voicemeet-pro — record, list, show, export, search, transcribe.
+"""CLI for voicemeet — record, list, show, export, search, transcribe.
 
 Uses typer + rich for a polished terminal experience.
 All heavy deps (sounddevice, pywhispercpp, ollama) are lazy-imported
@@ -476,7 +476,7 @@ def transcribe(
 @app.command()
 def setup() -> None:
     """Health check — verify all components are ready."""
-    console.print("[bold]voicemeet-pro setup check[/]\n")
+    console.print("[bold]voicemeet setup check[/]\n")
 
     checks: list[tuple[str, bool, str]] = []
 
@@ -643,7 +643,7 @@ def main_callback(
     ctx: typer.Context,
     version: bool = typer.Option(False, "--version", "-V", help="Show version"),
 ) -> None:
-    """voicemeet-pro — Premium local meeting notes."""
+    """voicemeet — Premium local meeting notes."""
     if version:
         from voicemeet import __version__
 

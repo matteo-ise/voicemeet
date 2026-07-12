@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# voicemeet-pro — clean uninstaller
+# voicemeet — clean uninstaller
 # Removes LaunchAgent, stops daemon. Keeps session data.
 #
 # Usage:  ./scripts/uninstall.sh
@@ -62,4 +62,4 @@ else
 fi
 
 echo ""
-echo "${BOLD}${GREEN}voicemeet-pro uninstalled.${RESET}"
+echo "${BOLD}${GREEN}voicemeet uninstalled.${RESET}"

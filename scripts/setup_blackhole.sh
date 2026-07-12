@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# voicemeet-pro — BlackHole setup helper
+# voicemeet — BlackHole setup helper
 # Installs BlackHole 2ch and provides setup instructions.
 #
 # Usage:  ./scripts/setup_blackhole.sh
@@ -18,7 +18,7 @@ step()  { printf "\n${BOLD}→ %s${RESET}\n" "$1"; }
 
 echo "${BOLD}BlackHole Setup — for system audio capture${RESET}"
 echo ""
-echo "BlackHole is a virtual audio driver that lets voicemeet-pro"
+echo "BlackHole is a virtual audio driver that lets voicemeet"
 echo "capture system audio (Zoom, Meet, Teams, browser calls)."
 echo ""
 
@@ -52,7 +52,7 @@ echo "  4. Set Master Device to your speakers"
 echo "  5. Set system output to this Multi-Output Device"
 echo "     (System Settings → Sound → Output → Multi-Output Device)"
 echo ""
-echo "  ${BOLD}Now voicemeet-pro can capture system audio via BlackHole.${RESET}"
+echo "  ${BOLD}Now voicemeet can capture system audio via BlackHole.${RESET}"
 echo ""
 
 # ── 3. Verify ─────────────────────────────────────────────

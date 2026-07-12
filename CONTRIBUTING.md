@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in voicemeet-pro! This is a community-driven, MIT-licensed project.
+Thanks for your interest in voicemeet! This is a community-driven, MIT-licensed project.
 
 ## Quick Start
 

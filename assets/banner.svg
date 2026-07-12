@@ -20,7 +20,7 @@
   </g>
 
   <!-- Title -->
-  <text x="180" y="80" font-family="-apple-system, Helvetica, sans-serif" font-size="42" font-weight="bold" fill="#f0f6fc">voicemeet-pro</text>
+  <text x="180" y="80" font-family="-apple-system, Helvetica, sans-serif" font-size="42" font-weight="bold" fill="#f0f6fc">voicemeet</text>
 
   <!-- Tagline -->
   <text x="180" y="115" font-family="-apple-system, Helvetica, sans-serif" font-size="18" fill="#8b949e">Premium local meeting notes — zero cost, fully private</text>

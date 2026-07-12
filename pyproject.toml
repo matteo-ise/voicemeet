@@ -9,7 +9,7 @@ description = "Premium local meeting notes — live transcription, AI summary, P
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.11"
-authors = [{ name = "voicemeet-pro" }]
+authors = [{ name = "voicemeet" }]
 keywords = ["whisper", "meeting-notes", "local-ai", "ollama", "macos", "privacy", "open-source"]
 classifiers = [
     "License :: OSI Approved :: MIT License",

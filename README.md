@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/banner.svg" alt="voicemeet-pro" width="800">
+<img src="assets/banner.svg" alt="voicemeet" width="800">
 
 ### Premium local meeting notes — zero cost, fully private, no cloud.
 
@@ -18,13 +18,13 @@ Live transcription · Speaker diarization · AI summary · PDF/DOCX/MD export ·
 
 ---
 
-## Why voicemeet-pro?
+## Why voicemeet?
 
 You're in back-to-back meetings. You take voice notes on your phone, screenshot transcripts, and manually format them into something useful. Or you pay $20/month for Granola, which sends your meeting audio to their servers.
 
-**voicemeet-pro does everything Granola does — but locally, for free, forever.**
+**voicemeet does everything Granola does — but locally, for free, forever.**
 
-| | voicemeet-pro | Granola | Meetily CE | OpenSuperWhisper |
+| | voicemeet | Granola | Meetily CE | OpenSuperWhisper |
 |---|:---:|:---:|:---:|:---:|
 | Live transcription | ✅ | ✅ | ✅ | ❌ |
 | Speaker diarization | ✅ | ✅ | ❌ | ❌ |
@@ -50,7 +50,7 @@ That's it. You now have a menubar icon (**VM**) and a global hotkey (**⌘⇧M**
 
 Press **⌘⇧M** anywhere → start talking → press again → get a structured summary with speaker labels, exported to Markdown, stored in your session library.
 
-> **Already have OpenSuperWhisper?** voicemeet-pro auto-detects your `ggml-large-v3-turbo` models. No extra downloads.
+> **Already have OpenSuperWhisper?** voicemeet auto-detects your `ggml-large-v3-turbo` models. No extra downloads.
 
 ---
 
@@ -142,7 +142,7 @@ cd voicemeet
 ```
 
 The installer:
-1. ✅ Installs voicemeet-pro with all features
+1. ✅ Installs voicemeet with all features
 2. ✅ Pulls `llama3.2` for Ollama summaries
 3. ✅ Detects your existing Whisper models (OpenSuperWhisper compatible)
 4. ✅ Sets up a LaunchAgent (auto-starts on login)
@@ -264,7 +264,7 @@ Click the **VM** icon in your menubar:
 ## How it works
 
 ```
-                    voicemeet-pro pipeline
+                    voicemeet pipeline
 
   ┌──────────┐     ┌──────┐     ┌──────────┐     ┌──────────┐
   │  Audio   │────▶│ VAD  │────▶│ Whisper  │────▶│ Segments │
@@ -355,7 +355,7 @@ MIT — see [LICENSE](./LICENSE).
 
 <div align="center">
 
-**⭐ If voicemeet-pro saves you money on meeting notes, star this repo.**
+**⭐ If voicemeet saves you money on meeting notes, star this repo.**
 
 Made with ❤️ for people who value privacy.
 

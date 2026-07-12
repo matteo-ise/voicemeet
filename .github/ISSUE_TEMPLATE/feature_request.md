@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest a feature for voicemeet-pro
+about: Suggest a feature for voicemeet
 title: "[FEATURE] "
 labels: enhancement
 assignees: ''

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# voicemeet-pro — one-command installer
+# voicemeet — one-command installer
 # Checks deps, installs everything, sets up background daemon.
 #
 # Usage:  ./scripts/install.sh
@@ -24,7 +24,7 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 LAUNCH_AGENT="$HOME/Library/LaunchAgents/com.voicemeet.pro.plist"
 
 echo "${BOLD}╔══════════════════════════════════════════════╗${RESET}"
-echo "${BOLD}║  voicemeet-pro installer                      ║${RESET}"
+echo "${BOLD}║  voicemeet installer                          ║${RESET}"
 echo "${BOLD}║  Premium local meeting notes — zero cost     ║${RESET}"
 echo "${BOLD}╚══════════════════════════════════════════════╝${RESET}"
 
@@ -46,14 +46,14 @@ fi
 PYTHON_PATH=$(python3 -c 'import sys; print(sys.executable)')
 info "Python $PY_VERSION at $PYTHON_PATH"
 
-# ── 2. Install voicemeet-pro ──────────────────────────────
-step "Installing voicemeet-pro (with all features)"
+# ── 2. Install voicemeet ──────────────────────────────────
+step "Installing voicemeet (with all features)"
 
 cd "$PROJECT_DIR"
 if python3 -m pip install -e ".[all]" --quiet 2>&1 | grep -v "already satisfied"; then
-    info "voicemeet-pro installed"
+    info "voicemeet installed"
 else
-    info "voicemeet-pro already up to date"
+    info "voicemeet already up to date"
 fi
 
 # Verify
@@ -179,7 +179,7 @@ echo "${BOLD}${GREEN}║  Installation complete!                       ║${RESE
 echo "${BOLD}${GREEN}╚══════════════════════════════════════════════╝${RESET}"
 echo ""
 echo "  ${BOLD}What just happened:${RESET}"
-echo "    • voicemeet-pro installed with all features"
+echo "    • voicemeet installed with all features"
 echo "    • Background daemon started (menubar icon: VM)"
 echo "    • Auto-starts on login"
 echo ""

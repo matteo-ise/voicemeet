@@ -16,7 +16,7 @@ from typing import Any
 from voicemeet.store.models import Segment, Session
 
 _PROMPT_PATH = Path(__file__).parent.parent.parent.parent / "templates" / "summary_prompt.txt"
-DEFAULT_MODEL = "llama3.2"
+DEFAULT_MODEL = "llama3.1:8b"
 DEFAULT_HOST = "http://localhost:11434"
 
 
