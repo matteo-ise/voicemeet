@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "voicemeet"
+version = "0.1.0"
+description = "Premium local meeting notes — live transcription, AI summary, PDF/DOCX/MD export, session memory. Zero cost, fully local."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [{ name = "voicemeet-pro" }]
+keywords = ["whisper", "meeting-notes", "local-ai", "ollama", "macos", "privacy", "open-source"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: MacOS",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+dependencies = [
+    "typer>=0.9",
+    "rich>=13.0",
+    "numpy>=1.24",
+    "scipy>=1.11",
+    "scikit-learn>=1.3",
+    "psutil>=5.9",
+    "ollama>=0.1",
+    "reportlab>=4.0",
+    "python-docx>=1.0",
+]
+
+[project.optional-dependencies]
+audio = ["sounddevice>=0.4"]
+transcribe = ["pywhispercpp>=1.2"]
+menubar = ["rumps>=0.4", "pynput>=1.7"]
+dev = ["pytest>=7.0", "ruff>=0.6"]
+all = ["voicemeet[audio,transcribe,menubar,dev]"]
+
+[project.scripts]
+voicemeet = "voicemeet.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/user/voicemeet-pro"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+voicemeet = ["store/schema.sql", "../templates/*.txt", "../templates/*.md"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["voicemeet"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.ruff.format]
+quote-style = "double"
