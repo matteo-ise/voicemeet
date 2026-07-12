@@ -72,9 +72,9 @@ def test_list_sessions_limit(store: SessionStore) -> None:
 
 def test_add_and_get_segments(store: SessionStore) -> None:
     sess = store.create_session(title="Segments Test")
-    seg1 = store.add_segment(sess.id, 0, 0, 5000, "Hello world")
-    seg2 = store.add_segment(sess.id, 1, 5000, 10000, "Second segment", speaker="Speaker 1")
-    seg3 = store.add_segment(
+    store.add_segment(sess.id, 0, 0, 5000, "Hello world")
+    store.add_segment(sess.id, 1, 5000, 10000, "Second segment", speaker="Speaker 1")
+    store.add_segment(
         sess.id, 2, 10000, 15000, "Third segment", speaker="Speaker 2", confidence=0.95
     )
 
@@ -118,8 +118,8 @@ def test_search_sessions(store: SessionStore) -> None:
 
 def test_add_and_get_exports(store: SessionStore) -> None:
     sess = store.create_session(title="Export Test")
-    exp1 = store.add_export(sess.id, "pdf", "/tmp/test.pdf")
-    exp2 = store.add_export(sess.id, "md", "/tmp/test.md")
+    store.add_export(sess.id, "pdf", "/tmp/test.pdf")
+    store.add_export(sess.id, "md", "/tmp/test.md")
 
     exports = store.get_exports(sess.id)
     assert len(exports) == 2
@@ -159,7 +159,7 @@ def test_duration_str(store: SessionStore) -> None:
 
 def test_segment_start_str(store: SessionStore) -> None:
     sess = store.create_session(title="Timestamp Test")
-    seg = store.add_segment(sess.id, 0, 65000, 70000, "Test")
+    store.add_segment(sess.id, 0, 65000, 70000, "Test")
     segments = store.get_segments(sess.id)
     # 65 seconds = 1:05
     assert segments[0].start_str == "01:05"
@@ -169,7 +169,7 @@ def test_persists_to_disk(tmp_path) -> None:
     """Verify the store can create and read from a file-based DB."""
     db_path = str(tmp_path / "test.db")
     s1 = SessionStore(db_path)
-    sess = s1.create_session(title="Persistent")
+    s1.create_session(title="Persistent")
     s1.close()
 
     s2 = SessionStore(db_path)

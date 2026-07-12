@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 import numpy as np
-import pytest
 
 from voicemeet.audio.mixer import mix_audio, normalize
-from voicemeet.transcribe.vad import VoiceActivityDetector, VADSegment
+from voicemeet.transcribe.vad import VADSegment, VoiceActivityDetector
 
 SAMPLE_RATE = 16000
 
@@ -77,11 +76,13 @@ class TestVAD:
         assert segments == []
 
     def test_detect_single_segment(self) -> None:
-        audio = np.concatenate([
-            _generate_silence(0.5),
-            _generate_tone(440, 1.0),
-            _generate_silence(0.5),
-        ])
+        audio = np.concatenate(
+            [
+                _generate_silence(0.5),
+                _generate_tone(440, 1.0),
+                _generate_silence(0.5),
+            ]
+        )
         vad = VoiceActivityDetector()
         segments = vad.detect(audio)
         assert len(segments) == 1
@@ -90,13 +91,15 @@ class TestVAD:
         assert len(segments[0].audio) > 0
 
     def test_detect_multiple_segments(self) -> None:
-        audio = np.concatenate([
-            _generate_tone(440, 0.5),
-            _generate_silence(1.0),
-            _generate_tone(880, 0.5),
-            _generate_silence(1.0),
-            _generate_tone(660, 0.5),
-        ])
+        audio = np.concatenate(
+            [
+                _generate_tone(440, 0.5),
+                _generate_silence(1.0),
+                _generate_tone(880, 0.5),
+                _generate_silence(1.0),
+                _generate_tone(660, 0.5),
+            ]
+        )
         vad = VoiceActivityDetector(min_silence_ms=500)
         segments = vad.detect(audio)
         assert len(segments) == 3
@@ -104,13 +107,15 @@ class TestVAD:
             assert seg.duration_ms >= 200
 
     def test_detect_filters_short_segments(self) -> None:
-        audio = np.concatenate([
-            _generate_silence(0.5),
-            _generate_tone(440, 0.1),  # Very short — should be filtered
-            _generate_silence(0.5),
-            _generate_tone(440, 0.5),  # Long enough
-            _generate_silence(0.5),
-        ])
+        audio = np.concatenate(
+            [
+                _generate_silence(0.5),
+                _generate_tone(440, 0.1),  # Very short — should be filtered
+                _generate_silence(0.5),
+                _generate_tone(440, 0.5),  # Long enough
+                _generate_silence(0.5),
+            ]
+        )
         vad = VoiceActivityDetector(min_segment_ms=300)
         segments = vad.detect(audio)
         assert len(segments) == 1
@@ -120,11 +125,13 @@ class TestVAD:
         assert vad.detect(np.array([], dtype=np.int16)) == []
 
     def test_segment_timestamps(self) -> None:
-        audio = np.concatenate([
-            _generate_silence(1.0),
-            _generate_tone(440, 1.0),
-            _generate_silence(1.0),
-        ])
+        audio = np.concatenate(
+            [
+                _generate_silence(1.0),
+                _generate_tone(440, 1.0),
+                _generate_silence(1.0),
+            ]
+        )
         vad = VoiceActivityDetector()
         segments = vad.detect(audio)
         assert len(segments) == 1
@@ -141,13 +148,15 @@ class TestVAD:
         block_size = int(SAMPLE_RATE * 0.1)  # 100ms blocks
 
         # Create audio: silence, speech, silence, speech, silence
-        audio = np.concatenate([
-            _generate_silence(0.3),
-            _generate_tone(440, 0.5),
-            _generate_silence(0.5),
-            _generate_tone(880, 0.5),
-            _generate_silence(0.3),
-        ])
+        audio = np.concatenate(
+            [
+                _generate_silence(0.3),
+                _generate_tone(440, 0.5),
+                _generate_silence(0.5),
+                _generate_tone(880, 0.5),
+                _generate_silence(0.3),
+            ]
+        )
 
         completed_segments: list[VADSegment] = []
         for i in range(0, len(audio), block_size):
@@ -176,11 +185,13 @@ class TestVAD:
 
     def test_custom_threshold(self) -> None:
         """High threshold should detect fewer segments."""
-        audio = np.concatenate([
-            _generate_silence(0.5),
-            _generate_tone(440, 1.0),
-            _generate_silence(0.5),
-        ])
+        audio = np.concatenate(
+            [
+                _generate_silence(0.5),
+                _generate_tone(440, 1.0),
+                _generate_silence(0.5),
+            ]
+        )
         low_thresh = VoiceActivityDetector(energy_threshold=50)
         high_thresh = VoiceActivityDetector(energy_threshold=20000)
         assert len(low_thresh.detect(audio)) >= 1
