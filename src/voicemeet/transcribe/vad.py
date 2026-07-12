@@ -14,7 +14,7 @@ import numpy as np
 
 DEFAULT_SAMPLE_RATE = 16000
 DEFAULT_FRAME_MS = 30  # 30ms frames — standard VAD frame size
-DEFAULT_ENERGY_THRESHOLD = 300.0  # RMS threshold for int16 audio
+DEFAULT_ENERGY_THRESHOLD = 100.0  # RMS threshold for int16 audio
 DEFAULT_MIN_SILENCE_MS = 700  # Pause duration to trigger segment boundary
 DEFAULT_MIN_SEGMENT_MS = 300  # Discard segments shorter than this
 DEFAULT_PADDING_MS = 300  # Pad segments with this much silence at start/end
