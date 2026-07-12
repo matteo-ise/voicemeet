@@ -470,6 +470,22 @@ def transcribe(
     store.close()
 
 
+# ── menubar ───────────────────────────────────────────────
+
+
+@app.command()
+def menubar() -> None:
+    """Start the menubar daemon app with auto-detection and hotkey."""
+    try:
+        from voicemeet.menubar import run_menubar
+
+        run_menubar()
+    except ImportError as e:
+        console.print(f"[red]Missing dependency: {e}[/]")
+        console.print("[dim]Install with: pip install 'voicemeet[menubar]'[/]")
+        raise typer.Exit(1) from e
+
+
 # ── Helpers ───────────────────────────────────────────────
 
 
