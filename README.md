@@ -56,32 +56,11 @@ Press **⌘⇧M** anywhere → start talking → press again → get a structure
 
 ## Demo
 
-```
-$ voicemeet record --title "Q3 Planning" --mode room
+<img src="assets/demo.gif" alt="voicemeet demo" width="700">
 
-Session started: a3f2b1c4-...
-Mode: room | Language: auto
-Recording... Press Ctrl+C to stop.
+*Full walkthrough: `setup` → `record --dry-run` → `list` → `show` → `export` → `search`*
 
-  [00:00] Welcome to the Q3 planning sync, everyone.
-  [00:08] Let's start with the roadmap review.
-  [00:15] Alice, can you walk us through the launch timeline?
-  [00:22] Sure — we're targeting August 15th for the public release.
-  [00:30] Bob, what's the status on the marketing site?
-  [00:38] Landing page is live, working on the docs site now.
-
-Diarization: 3 speakers detected.
-Generating summary via Ollama...
-  Title: Q3 Planning Sync
-  Participants: Speaker 1, Alice, Bob
-  Topics: Q3 Roadmap, Launch Timeline, Marketing Site
-
-Session complete: a3f2b1c4-...
-Duration: 00:00:45
-Exported: ~/.voicemeet/exports/20260712_1400_Q3_Planning_Sync.md
-```
-
-> 🎬 **Want to add a demo GIF?** Record with: `asciinema rec demo.cast` then `agg demo.cast assets/demo.gif`. PRs welcome!
+> 🎬 **Want to record your own?** `asciinema rec --command ./scripts/demo.sh demo.cast && agg demo.cast demo.gif`
 
 ---
 
