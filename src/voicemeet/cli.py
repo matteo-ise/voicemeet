@@ -470,6 +470,142 @@ def transcribe(
     store.close()
 
 
+# ── setup ─────────────────────────────────────────────────
+
+
+@app.command()
+def setup() -> None:
+    """Health check — verify all components are ready."""
+    console.print("[bold]voicemeet-pro setup check[/]\n")
+
+    checks: list[tuple[str, bool, str]] = []
+
+    # Python version
+    import sys
+
+    py_ok = sys.version_info >= (3, 11)
+    checks.append(("Python 3.11+", py_ok, f"{sys.version_info.major}.{sys.version_info.minor}"))
+
+    # Core deps
+    for mod_name, display in [
+        ("typer", "typer"),
+        ("rich", "rich"),
+        ("numpy", "numpy"),
+        ("scipy", "scipy"),
+        ("sklearn", "scikit-learn"),
+        ("psutil", "psutil"),
+    ]:
+        try:
+            __import__(mod_name)
+            checks.append((display, True, "installed"))
+        except ImportError:
+            checks.append((display, False, "missing — run: pip install -e '.[all]'"))
+
+    # Audio
+    try:
+        import sounddevice  # noqa: F401
+
+        checks.append(("sounddevice (audio)", True, "installed"))
+    except ImportError:
+        checks.append(("sounddevice (audio)", False, "missing — pip install sounddevice"))
+
+    # Whisper
+    try:
+        from voicemeet.transcribe.engine import find_model
+
+        model = find_model()
+        if model:
+            checks.append(("Whisper model", True, model))
+        else:
+            checks.append(("Whisper model", False, "not found — see install instructions"))
+    except Exception:
+        checks.append(("Whisper model", False, "detection failed"))
+
+    try:
+        import pywhispercpp  # noqa: F401
+
+        checks.append(("pywhispercpp", True, "installed"))
+    except ImportError:
+        checks.append(("pywhispercpp", False, "missing — pip install pywhispercpp"))
+
+    # Ollama
+    try:
+        from voicemeet.summarize.ollama_summarizer import OllamaSummarizer
+
+        summarizer = OllamaSummarizer()
+        if summarizer.check_connection():
+            checks.append(("Ollama (summaries)", True, "running"))
+        else:
+            checks.append(("Ollama (summaries)", False, "not running — start: ollama serve"))
+    except Exception:
+        checks.append(("Ollama (summaries)", False, "check failed"))
+
+    # Export deps
+    for mod_name, display in [("reportlab", "reportlab (PDF)"), ("docx", "python-docx (DOCX)")]:
+        try:
+            __import__(mod_name)
+            checks.append((display, True, "installed"))
+        except ImportError:
+            checks.append((display, False, "missing"))
+
+    # BlackHole
+    try:
+        import sounddevice as sd
+
+        devs = sd.query_devices()
+        found = any("BlackHole" in d.get("name", "") for d in devs)
+        checks.append(
+            (
+                "BlackHole (system audio)",
+                found,
+                "installed" if found else "optional — brew install blackhole-2ch",
+            )
+        )
+    except Exception:
+        checks.append(("BlackHole (system audio)", False, "cannot check"))
+
+    # Menubar deps
+    try:
+        import rumps  # noqa: F401
+
+        checks.append(("rumps (menubar)", True, "installed"))
+    except ImportError:
+        checks.append(("rumps (menubar)", False, "missing — pip install rumps"))
+
+    try:
+        import pynput  # noqa: F401
+
+        checks.append(("pynput (hotkey)", True, "installed"))
+    except ImportError:
+        checks.append(("pynput (hotkey)", False, "missing — pip install pynput"))
+
+    # Print results
+    table = Table(title="Setup Check", show_lines=False)
+    table.add_column("Component", style="bold")
+    table.add_column("Status", width=8)
+    table.add_column("Detail")
+
+    all_ok = True
+    for name, ok, detail in checks:
+        status = "[green]✓ ok[/]" if ok else "[red]✗ missing[/]"
+        if not ok:
+            all_ok = False
+        table.add_row(name, status, detail)
+
+    console.print(table)
+
+    if all_ok:
+        console.print("\n[bold green]All components ready![/] 🎉")
+        console.print('  Start recording: [bold]voicemeet record --title "Test"[/]')
+        console.print("  Or start menubar: [bold]voicemeet menubar[/]")
+    else:
+        console.print("\n[yellow]Some components missing.[/]")
+        console.print("  Fix with: [bold]pip install -e '.[all]'[/]")
+        console.print("  Then re-run: [bold]voicemeet setup[/]")
+
+    raise typer.Exit(0 if all_ok else 1)
+
+
 # ── menubar ───────────────────────────────────────────────
 
 

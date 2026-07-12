@@ -1,191 +1,362 @@
-# voicemeet-pro
+<div align="center">
 
-> Premium local meeting notes — live transcription, AI summary, PDF/DOCX/MD export, session memory. Zero cost, fully local, MIT-licensed.
+<img src="assets/banner.svg" alt="voicemeet-pro" width="800">
+
+### Premium local meeting notes — zero cost, fully private, no cloud.
 
 [![CI](https://github.com/user/voicemeet-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/user/voicemeet-pro/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://www.apple.com/macos)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-## What it is
+**The Granola alternative that doesn't sell your meetings to the cloud.**
 
-A macOS tool (Python, menubar + CLI) that records meetings, transcribes them live (Whisper via whisper.cpp, Apple-Silicon-optimized), separates speakers, generates a structured summary (Ollama), and exports to PDF / DOCX / Markdown. All sessions are stored in a local SQLite database — searchable and reloadable.
+Live transcription · Speaker diarization · AI summary · PDF/DOCX/MD export · Session memory · Auto-detection · Menubar daemon · Global hotkey
 
-**Everything runs locally.** No cloud, no API keys, no telemetry. Your audio never leaves your machine.
+</div>
 
-### Two recording modes
+---
 
-| Mode | Use case | Audio source | Diarization |
-|------|----------|-------------|-------------|
-| `room` | In-person meetings, conference rooms | Microphone | Yes (spectral clustering) |
-| `online` | Video calls (Zoom, Meet, Teams, Notion) | Microphone + System audio (BlackHole) | Optional |
-| `auto` | Auto-detect based on running processes | Process-dependent | If room mode |
+## Why voicemeet-pro?
 
-### Features
+You're in back-to-back meetings. You take voice notes on your phone, screenshot transcripts, and manually format them into something useful. Or you pay $20/month for Granola, which sends your meeting audio to their servers.
 
-- **Live transcription** — Whisper `large-v3-turbo` via whisper.cpp, real-time streaming with VAD
-- **Speaker diarization** — Spectral feature extraction + KMeans clustering, no API key needed
-- **AI summary** — Structured header (date, time, duration, participants, topics) + summary + action items via Ollama
-- **1-click export** — PDF (reportlab), DOCX (python-docx), Markdown
-- **Session memory** — SQLite, full-text search, reload any past meeting
-- **Auto meeting detection** — Watches for Zoom/Teams/Meet/Discord/Notion processes, confirms with audio VAD, sends macOS notification
-- **Menubar daemon** — rumps menubar app with recording controls
-- **Global hotkey** — Cmd+Shift+M toggles recording from any app
+**voicemeet-pro does everything Granola does — but locally, for free, forever.**
+
+| | voicemeet-pro | Granola | Meetily CE | OpenSuperWhisper |
+|---|:---:|:---:|:---:|:---:|
+| Live transcription | ✅ | ✅ | ✅ | ❌ |
+| Speaker diarization | ✅ | ✅ | ❌ | ❌ |
+| AI summary | ✅ local | ✅ cloud | ✅ local | ❌ |
+| PDF export | ✅ | 💰 Pro | ❌ | ❌ |
+| DOCX export | ✅ | 💰 Pro | ❌ | ❌ |
+| Session memory | ✅ | 💰 Pro | ❌ | ❌ |
+| Auto-detection | ✅ | 💰 Pro | ❌ | ❌ |
+| **Price** | **Free** | Free/Pro | Free | Free |
+| **Privacy** | **100% local** | Cloud | Local | Local |
+
+---
+
+## Quick start (60 seconds)
+
+```bash
+git clone https://github.com/user/voicemeet-pro.git
+cd voicemeet-pro
+./scripts/install.sh
+```
+
+That's it. You now have a menubar icon (**VM**) and a global hotkey (**⌘⇧M**).
+
+Press **⌘⇧M** anywhere → start talking → press again → get a structured summary with speaker labels, exported to Markdown, stored in your session library.
+
+> **Already have OpenSuperWhisper?** voicemeet-pro auto-detects your `ggml-large-v3-turbo` models. No extra downloads.
+
+---
+
+## Demo
+
+```
+$ voicemeet record --title "Q3 Planning" --mode room
+
+Session started: a3f2b1c4-...
+Mode: room | Language: auto
+Recording... Press Ctrl+C to stop.
+
+  [00:00] Welcome to the Q3 planning sync, everyone.
+  [00:08] Let's start with the roadmap review.
+  [00:15] Alice, can you walk us through the launch timeline?
+  [00:22] Sure — we're targeting August 15th for the public release.
+  [00:30] Bob, what's the status on the marketing site?
+  [00:38] Landing page is live, working on the docs site now.
+
+Diarization: 3 speakers detected.
+Generating summary via Ollama...
+  Title: Q3 Planning Sync
+  Participants: Speaker 1, Alice, Bob
+  Topics: Q3 Roadmap, Launch Timeline, Marketing Site
+
+Session complete: a3f2b1c4-...
+Duration: 00:00:45
+Exported: ~/.voicemeet/exports/20260712_1400_Q3_Planning_Sync.md
+```
+
+> 🎬 **Want to add a demo GIF?** Record with: `asciinema rec demo.cast` then `agg demo.cast assets/demo.gif`. PRs welcome!
+
+---
+
+## Features
+
+### 🎙️ Live transcription
+Real-time Whisper `large-v3-turbo` via whisper.cpp, optimized for Apple Silicon with Metal acceleration. Streaming VAD detects speech segments and transcribes them as you talk — no waiting until the end.
+
+### 🧑‍💼 Speaker diarization
+Spectral feature extraction + KMeans clustering assigns "Speaker 1/2/3" labels automatically. No pyannote API key, no HuggingFace token — pure scipy + scikit-learn, runs locally.
+
+### 🧠 AI summary with structured header
+Ollama generates a meeting summary with:
+- **Header**: Date, time, duration, participants, topics
+- **Summary**: 2-4 paragraph Markdown overview
+- **Action items**: Checklist with assignees
+
+### 📄 One-click export
+| Format | Library | Contents |
+|--------|---------|---------|
+| **PDF** | reportlab | Title, metadata table, summary, action items, transcript table |
+| **DOCX** | python-docx | Headings, metadata, summary, action item bullets, transcript table |
+| **Markdown** | stdlib | Full document with speaker-attributed transcript |
+
+### 💾 Session memory
+Every meeting is stored in a local SQLite database. Search across all transcripts, reload any session, re-export in any format.
+
+```bash
+voicemeet search "quarterly budget"
+voicemeet show a3f2b1c4
+voicemeet export a3f2b1c4 --format pdf
+```
+
+### 🔔 Auto meeting detection
+Background daemon watches for meeting apps (Zoom, Teams, Meet, Discord, Notion, Webex) and confirms with audio VAD. Sends a macOS notification: *"Meeting detected — start recording?"*
+
+### 📊 Menubar daemon + global hotkey
+- **VM** icon in your menubar — click for controls
+- **⌘⇧M** toggles recording from any app
+- Auto-starts on login (via LaunchAgent)
+- Recent meetings, quick PDF export, auto-detect toggle
+
+---
 
 ## Installation
 
 ### Prerequisites
-
 - macOS Apple Silicon (M1+)
 - Python 3.11+
-- [Ollama](https://ollama.ai) installed and running
+- [Ollama](https://ollama.ai) for AI summaries
 
-### Setup
+### Option A: One-command install (recommended)
 
 ```bash
-# 1. Install voicemeet-pro
+git clone https://github.com/user/voicemeet-pro.git
+cd voicemeet-pro
+./scripts/install.sh
+```
+
+The installer:
+1. ✅ Installs voicemeet-pro with all features
+2. ✅ Pulls `llama3.2` for Ollama summaries
+3. ✅ Detects your existing Whisper models (OpenSuperWhisper compatible)
+4. ✅ Sets up a LaunchAgent (auto-starts on login)
+5. ✅ Starts the menubar daemon
+
+### Option B: Manual install
+
+```bash
 git clone https://github.com/user/voicemeet-pro.git
 cd voicemeet-pro
 pip install -e ".[all]"
-
-# 2. Pull Ollama model for summaries
 ollama pull llama3.2
 
-# 3. (Optional) Install BlackHole for system audio capture
+# Start menubar daemon
+python -m voicemeet.menubar
+
+# Or use CLI
+voicemeet record --title "My Meeting"
+```
+
+### Option C: System audio (online meetings)
+
+To capture system audio (Zoom, Meet, Teams) in addition to your mic:
+
+```bash
 brew install blackhole-2ch
-# Then set up a Multi-Output Device in Audio MIDI Setup
-# See: https://github.com/ExistentialAudio/BlackHole
-
-# 4. (Optional) Set model path if you have existing whisper models
-export VOICEMEET_MODEL_PATH="/path/to/ggml-large-v3-turbo-q5_0.bin"
+./scripts/setup_blackhole.sh
 ```
 
-### Using existing OpenSuperWhisper models
+Then use `--mode online`:
+```bash
+voicemeet record --title "Client Call" --mode online
+```
 
-If you already use OpenSuperWhisper, voicemeet-pro automatically detects your models in:
+### Verify your setup
+
+```bash
+voicemeet setup
 ```
-~/Library/Application Support/ru.starmel.OpenSuperWhisper/whisper-models/
+
+Checks all components and shows what's ready:
 ```
-No additional download needed.
+✓ Python 3.12          ✓ Whisper model
+✓ sounddevice          ✓ pywhispercpp
+✓ Ollama (running)     ✓ reportlab (PDF)
+✓ python-docx (DOCX)   ✓ rumps (menubar)
+✓ pynput (hotkey)      ! BlackHole (optional)
+
+All components ready! 🎉
+```
+
+---
 
 ## Usage
 
 ### CLI
 
 ```bash
-# Record a meeting (Ctrl+C to stop)
-voicemeet record --title "Q3 Planning" --mode room
+# Record a room meeting (mic + speaker diarization)
+voicemeet record --title "Team Standup" --mode room
 
-# Record with system audio (online meeting)
+# Record an online meeting (mic + system audio)
 voicemeet record --title "Client Call" --mode online
 
 # Auto-stop after 30 seconds (smoke test)
 voicemeet record --test 30
 
-# Dry run (no microphone needed — tests full pipeline)
+# Dry run — test full pipeline without microphone
 voicemeet record --dry-run --title "Test"
 
 # List all sessions
 voicemeet list
 
-# Show session details + transcript
+# Show session details + full transcript
 voicemeet show <session-id>
 
-# Export to specific format
-voicemeet export <session-id> --format pdf
+# Export to all formats
 voicemeet export <session-id> --format all
 
 # Search across all transcripts
 voicemeet search "quarterly budget"
 
-# Transcribe an existing WAV file
+# Transcribe an existing WAV file (offline import)
 voicemeet transcribe recording.wav --title "Imported Meeting"
+
+# Start menubar daemon
+voicemeet menubar
+
+# Health check
+voicemeet setup
 ```
 
 ### Menubar app
 
-```bash
-# Start menubar daemon
-python -m voicemeet.menubar
+Click the **VM** icon in your menubar:
+
+| Menu item | Action |
+|-----------|--------|
+| New Meeting | Start recording |
+| Start Recording | Toggle recording |
+| Recent Meetings | Last 5 sessions |
+| Export Last as PDF | Quick PDF export |
+| Auto-Detect | Toggle meeting auto-detection |
+| Quit | Stop daemon |
+
+**⌘⇧M** toggles recording from any application.
+
+### Configuration
+
+| Setting | Env var | Default |
+|---------|---------|---------|
+| Database | `VOICEMEET_DB` | `~/.voicemeet/voicemeet.db` |
+| Model path | `VOICEMEET_MODEL_PATH` | Auto-detect (OpenSuperWhisper, `~/.voicemeet/models/`) |
+| Exports | — | `~/.voicemeet/exports/` |
+| Recordings | — | `~/.voicemeet/recordings/` |
+
+---
+
+## How it works
+
 ```
+                    voicemeet-pro pipeline
 
-The menubar app provides:
-- **New Meeting** — Start recording
-- **Start/Stop Recording** — Toggle recording
-- **Recent Meetings** — Last 5 sessions
-- **Export Last as PDF** — Quick export
-- **Auto-Detect** — Toggle meeting auto-detection
-- **Quit**
-
-**Global hotkey:** Cmd+Shift+M toggles recording from any application.
-
-## Configuration
-
-| Setting | Env var | Default | Description |
-|---------|---------|---------|-------------|
-| Database path | `VOICEMEET_DB` | `~/.voicemeet/voicemeet.db` | SQLite database location |
-| Model path | `VOICEMEET_MODEL_PATH` | Auto-detect | Path to ggml .bin whisper model |
-| Export directory | — | `~/.voicemeet/exports/` | Export file output |
-| Audio recordings | — | `~/.voicemeet/recordings/` | Raw audio files |
-
-## Architecture
-
-```
-Audio Capture (mic + system) → VAD (segment detection)
-    → Whisper streaming transcription → Segments in SQLite
-    → Speaker diarization (spectral clustering)
-    → Ollama summary (header + topics + action items)
-    → Export pipeline (PDF / DOCX / Markdown)
-    → Session finalized in DB
+  ┌──────────┐     ┌──────┐     ┌──────────┐     ┌──────────┐
+  │  Audio   │────▶│ VAD  │────▶│ Whisper  │────▶│ Segments │
+  │  Capture │     │      │     │ (.cpp)   │     │ in SQLite│
+  └──────────┘     └──────┘     └──────────┘     └──────────┘
+       │                                              │
+       │                                    ┌─────────┘
+       ▼                                    ▼
+  ┌──────────┐                     ┌──────────────┐
+  │  Diarize │────────────────────▶│ Ollama       │
+  │ (sklearn)│                     │ Summary      │
+  └──────────┘                     └──────────────┘
+                                          │
+                                   ┌──────┘
+                                   ▼
+                          ┌──────────────────┐
+                          │ Export: PDF/DOCX/MD│
+                          │ + Session in DB   │
+                          └──────────────────┘
 ```
 
 ### Tech stack
 
 | Layer | Technology | Why |
 |-------|-----------|-----|
-| Transcription | whisper.cpp (pywhispercpp) | Reads ggml .bin models directly, Metal backend |
+| Transcription | whisper.cpp (pywhispercpp) | Reads ggml .bin models, Metal backend, reuses OpenSuperWhisper models |
 | Audio | sounddevice + numpy | Standard, reliable, BlackHole-compatible |
-| Summary | Ollama (llama3.2) | Local, no API key, runs on Apple Silicon |
-| Storage | sqlite3 (stdlib) | Zero dependency, robust |
-| PDF | reportlab | Mature, high-quality output |
+| Summary | Ollama (llama3.2) | Local, no API key, Apple Silicon optimized |
+| Storage | sqlite3 (stdlib) | Zero dependency, robust, full-text search |
+| PDF | reportlab | Mature, professional output |
 | DOCX | python-docx | Standard for Word documents |
 | CLI | typer + rich | Beautiful terminal UI |
 | Menubar | rumps | Simplest macOS menubar lib |
 | Hotkey | pynput | Global keyboard shortcuts |
 | Diarization | scipy + scikit-learn | No API key, no model download |
 
-## Comparison
+---
 
-| Feature | voicemeet-pro | Granola | Meetily CE | OpenSuperWhisper |
-|---------|:---:|:---:|:---:|:---:|
-| Live transcription | Yes | Yes | Yes | No |
-| Speaker diarization | Yes | Yes | No | No |
-| AI summary | Yes (local) | Yes (cloud) | Yes (local) | No |
-| PDF export | Yes | Pro | No | No |
-| DOCX export | Yes | Pro | No | No |
-| Session memory | Yes | Pro | No | No |
-| Auto-detection | Yes | Pro | No | No |
-| Price | Free | Free/Pro | Free | Free |
-| Privacy | Fully local | Cloud | Local | Local |
+## Privacy
+
+**Everything runs locally. No cloud, no API keys, no telemetry.**
+
+- Audio is captured and processed on-device
+- Transcription runs via local Whisper model
+- Summaries are generated by Ollama on `localhost:11434`
+- Sessions are stored in a local SQLite database
+- No analytics, no tracking, no data ever leaves your machine
+
+---
 
 ## Roadmap
 
 See [ROADMAP.md](./ROADMAP.md) for the full plan.
 
-- **v1.1** — Named speakers, pyannote diarization
+- **v1.1** — Named speaker identification, pyannote diarization
 - **v1.2** — Calendar integration, pre-meeting briefs
 - **v1.3** — Windows/Linux support
 - **v1.4** — py2app bundle, notarized release
 - **v2.0** — Chat with your meetings (RAG over session DB)
 
-## Known limitations
-
-- **BlackHole** required for system audio capture (online meetings). Install with `brew install blackhole-2ch`.
-- **Diarization** labels speakers as "Speaker 1/2/3" — named identification is v1.1.
-- **macOS only** — Windows/Linux port is v1.3.
-- **rumps + py2app** may trigger quarantine. Fix with: `xattr -d com.apple.quarantine /path/to/app`
+---
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
+Contributions are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+Pull requests are merged faster if they:
+- Pass `pytest tests/ -q` and `ruff check src/`
+- Use conventional commits (`feat:`, `fix:`, `docs:`)
+- Don't add cloud dependencies or API keys
+
+---
+
+## Uninstall
+
+```bash
+./scripts/uninstall.sh           # Stop daemon, remove LaunchAgent
+./scripts/uninstall.sh --purge   # Also delete session data
+```
+
+---
 
 ## License
 
 MIT — see [LICENSE](./LICENSE).
+
+---
+
+<div align="center">
+
+**⭐ If voicemeet-pro saves you money on meeting notes, star this repo.**
+
+Made with ❤️ for people who value privacy.
+
+</div>
