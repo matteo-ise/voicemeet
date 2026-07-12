@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Projekt-spezifisch (niemals committen)
+*.db
+*.sqlite
+*.sqlite3
+~/.voicemeet/
+exports/*.pdf
+exports/*.docx
+exports/*.md
+recordings/*.wav
+recordings/*.m4a
+models/
+*.mlpackage
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
